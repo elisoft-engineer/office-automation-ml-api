@@ -1,0 +1,5 @@
+job_id,description,status,estimated_hours
+J01,Inspect weld W12,open,2
+J02,Check drawing revision,done,1
+J03,Review plate certificate,in_progress,1.5
+J04,Prepare coating record,open,3

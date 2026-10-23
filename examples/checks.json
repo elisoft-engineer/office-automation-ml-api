@@ -1,0 +1,50 @@
+[
+  {
+    "input": "materials/jobs.csv",
+    "expected": "four rows; all placeholders replaced; counts and hours match input"
+  },
+  {
+    "input": "examples/csv/header_only.csv",
+    "expected": "zero rows and zero totals"
+  },
+  {
+    "input": "examples/csv/zero_hours.csv",
+    "expected": "one row, one open job, zero total hours"
+  },
+  {
+    "input": "examples/csv/unknown_status.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/negative_hours.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/nonnumeric_hours.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/nan_hours.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/missing_job_id.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/missing_hours.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/missing_description.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/missing_status.csv",
+    "expected": "clear validation error; no new report written"
+  },
+  {
+    "input": "examples/csv/missing_column.csv",
+    "expected": "clear validation error; no new report written"
+  }
+]

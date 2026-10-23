@@ -1,0 +1,47 @@
+[
+  {
+    "case": "missing text",
+    "body": {},
+    "expected_status": 400
+  },
+  {
+    "case": "empty text",
+    "body": {
+      "text": ""
+    },
+    "expected_status": 400
+  },
+  {
+    "case": "whitespace only",
+    "body": {
+      "text": "   "
+    },
+    "expected_status": 400
+  },
+  {
+    "case": "null text",
+    "body": {
+      "text": null
+    },
+    "expected_status": 400
+  },
+  {
+    "case": "numeric text",
+    "body": {
+      "text": 42
+    },
+    "expected_status": 400
+  },
+  {
+    "case": "array text",
+    "body": {
+      "text": []
+    },
+    "expected_status": 400
+  },
+  {
+    "case": "non-object body",
+    "body": [],
+    "expected_status": 400
+  }
+]

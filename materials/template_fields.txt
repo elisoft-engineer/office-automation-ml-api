@@ -1,0 +1,6 @@
+Synthetic template contract
+TOTAL_JOBS = input row count
+OPEN, IN_PROGRESS, DONE = row count for each status
+TOTAL_HOURS = sum of estimated_hours, decimal hours
+JOB_ROWS = all rows with ID, description, status and estimated hours, as a table or readable lines
+All double-brace placeholders must be replaced. Keep the synthetic label.

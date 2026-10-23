@@ -1,0 +1,26 @@
+[
+  {
+    "text": "Inspect a crack in this weld",
+    "label": "quality"
+  },
+  {
+    "text": "The leak check failed",
+    "label": "quality"
+  },
+  {
+    "text": "Move assembly to the next shift",
+    "label": "planning"
+  },
+  {
+    "text": "Assign workers to tomorrow's job",
+    "label": "planning"
+  },
+  {
+    "text": "Retrieve the current drawing",
+    "label": "documents"
+  },
+  {
+    "text": "Where is the certificate file?",
+    "label": "documents"
+  }
+]

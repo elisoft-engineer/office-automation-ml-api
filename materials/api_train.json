@@ -1,0 +1,50 @@
+[
+  {
+    "text": "Weld defect needs inspection",
+    "label": "quality"
+  },
+  {
+    "text": "Plate failed material inspection",
+    "label": "quality"
+  },
+  {
+    "text": "Coating surface is wet",
+    "label": "quality"
+  },
+  {
+    "text": "Leak check found a defect",
+    "label": "quality"
+  },
+  {
+    "text": "Schedule the block assembly tomorrow",
+    "label": "planning"
+  },
+  {
+    "text": "Allocate workers for next week",
+    "label": "planning"
+  },
+  {
+    "text": "Update the production schedule",
+    "label": "planning"
+  },
+  {
+    "text": "Plan the next shift",
+    "label": "planning"
+  },
+  {
+    "text": "Find the latest drawing revision",
+    "label": "documents"
+  },
+  {
+    "text": "Material certificate file is missing",
+    "label": "documents"
+  },
+  {
+    "text": "Upload the handover record",
+    "label": "documents"
+  },
+  {
+    "text": "Locate the approved document",
+    "label": "documents"
+  }
+]
