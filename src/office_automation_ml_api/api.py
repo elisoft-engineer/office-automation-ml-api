@@ -1,5 +1,3 @@
-"""Local HTTP inference API."""
-
 import os
 from pathlib import Path
 
@@ -19,12 +17,15 @@ app = FastAPI(title="Office Automation ML API", version="1.0.0")
 
 
 class PredictRequest(BaseModel):
+    """Text to classify, with no extra fields or blank input allowed."""
+
     model_config = ConfigDict(extra="forbid")
     text: str
 
     @field_validator("text")
     @classmethod
     def require_nonblank_text(cls, value: str) -> str:
+        """Trim surrounding whitespace and reject text with no content."""
         value = value.strip()
         if not value:
             raise ValueError("text must be a nonempty string")
@@ -32,11 +33,15 @@ class PredictRequest(BaseModel):
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_error_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
-    return JSONResponse(status_code=400, content={"error": "request must be an object with nonempty string text"})
+async def validation_error_handler(_request: Request, _exc: RequestValidationError) -> JSONResponse:
+    """Return a consistent client error when a request does not match the schema."""
+    return JSONResponse(
+        status_code=400, content={"error": "request must be an object with nonempty string text"}
+    )
 
 
 @app.post("/predict")
 async def predict(payload: PredictRequest) -> dict[str, str]:
+    """Classify the submitted text and return the selected model's name."""
     label = classifier.predict([payload.text])[0]
     return {"label": label, "model": MODEL_NAME}
