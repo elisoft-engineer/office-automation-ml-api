@@ -50,10 +50,10 @@ Start the service in one terminal:
 poetry run python scripts/run_api.py
 ```
 
-The API trains a TF-IDF plus logistic-regression pipeline from `materials/api_train.json` at startup, before accepting requests. It listens on `127.0.0.1:8000` by default; set `HOST` or `PORT` to change the bind address. A valid request returns both the predicted label and model name:
+The API trains a TF-IDF plus logistic-regression pipeline from `materials/api_train.json` at startup, before accepting requests. It listens on `localhost:8000` by default; set `HOST` or `PORT` to change the bind address. The interactive API documentation is available at `http://localhost:8000/docs`. A valid request returns both the predicted label and model name:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/predict \
+curl -X POST http://localhost:8000/predict \
   -H 'Content-Type: application/json' \
   -d '{"text":"Inspect a weld defect"}'
 ```
@@ -74,7 +74,18 @@ With the API running, run the Part B evaluation:
 poetry run python scripts/evaluate_api.py
 ```
 
-If the API uses a non-default address, set `API_URL` when running the evaluator, for example `API_URL=http://127.0.0.1:8765 poetry run python scripts/evaluate_api.py`.
+If the API uses a non-default address, set `API_URL` when running the evaluator, for example `API_URL=http://localhost:8765 poetry run python scripts/evaluate_api.py`.
+
+Run the unit tests and code checks with:
+
+```bash
+poetry run pytest
+poetry run ruff format --check src scripts tests
+poetry run ruff check src scripts tests
+poetry run mypy
+```
+
+The API tests send requests through httpx directly to the in-process FastAPI app, using `http://localhost:8000` as the test base URL. They do not need a separate server. For the end-to-end evaluator, start the service in one terminal with `poetry run python scripts/run_api.py`, then run `poetry run python scripts/evaluate_api.py` in another terminal. The evaluator expects the service at `http://localhost:8000` by default.
 
 The evaluation compares a corpus-derived keyword baseline with the fixed TF-IDF/logistic-regression model on all six records in `examples/api_test.json`, then exercises every case in `examples/api_invalid.json`. It writes the complete prediction-level results and timing to `results/api_evaluation.json`. The mean endpoint time includes the HTTP round trip, request parsing, and prediction. It excludes model fitting/loading, which is completed before the server starts. No test labels are used for fitting or tuning.
 
