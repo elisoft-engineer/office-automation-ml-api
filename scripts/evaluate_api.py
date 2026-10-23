@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Evaluate the fixed keyword baseline and HTTP classifier on supplied examples."""
-
 import json
 import os
 import sys
@@ -16,12 +13,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from office_automation_ml_api.classifiers import KeywordBaseline, load_training  # noqa: E402
 
-BASE_URL = os.environ.get("API_URL", "http://127.0.0.1:8000").rstrip("/")
+BASE_URL = os.environ.get("API_URL", "http://localhost:8000").rstrip("/")
 
 
 def post(payload: object) -> tuple[int, dict, float]:
+    """Send one prediction request and return its status, body, and elapsed time."""
     data = json.dumps(payload).encode("utf-8")
-    request = Request(BASE_URL + "/predict", data=data, headers={"Content-Type": "application/json"})
+    request = Request(
+        BASE_URL + "/predict", data=data, headers={"Content-Type": "application/json"}
+    )
     started = time.perf_counter()
     try:
         with urlopen(request, timeout=5) as response:
@@ -33,6 +33,7 @@ def post(payload: object) -> tuple[int, dict, float]:
 
 
 def main() -> int:
+    """Compare the API predictions with the examples and keyword baseline."""
     records = json.loads((ROOT / "examples/api_test.json").read_text(encoding="utf-8"))
     train_texts, train_labels = load_training(ROOT / "materials/api_train.json")
     baseline = KeywordBaseline(train_texts, train_labels)
@@ -47,24 +48,34 @@ def main() -> int:
             endpoint_times.append(elapsed_ms)
         else:
             prediction = None
-        results.append({
-            "text": record["text"],
-            "expected": expected,
-            "keyword_prediction": baseline_prediction,
-            "keyword_correct": baseline_prediction == expected,
-            "model_prediction": prediction,
-            "model_correct": prediction == expected,
-            "http_status": status,
-            "response_ms": round(elapsed_ms, 3),
-        })
+        results.append(
+            {
+                "text": record["text"],
+                "expected": expected,
+                "keyword_prediction": baseline_prediction,
+                "keyword_correct": baseline_prediction == expected,
+                "model_prediction": prediction,
+                "model_correct": prediction == expected,
+                "http_status": status,
+                "response_ms": round(elapsed_ms, 3),
+            }
+        )
 
     invalid_results = []
     for case in json.loads((ROOT / "examples/api_invalid.json").read_text(encoding="utf-8")):
         status, body, _ = post(case["body"])
-        invalid_results.append({"case": case["case"], "expected_status": case["expected_status"],
-                                "actual_status": status, "response": body})
+        invalid_results.append(
+            {
+                "case": case["case"],
+                "expected_status": case["expected_status"],
+                "actual_status": status,
+                "response": body,
+            }
+        )
     failures = sum(row["http_status"] != 200 for row in results)
-    invalid_failures = sum(row["actual_status"] != row["expected_status"] for row in invalid_results)
+    invalid_failures = sum(
+        row["actual_status"] != row["expected_status"] for row in invalid_results
+    )
     report = {
         "model": "tfidf-logistic-regression",
         "scikit_learn_version": sklearn.__version__,
@@ -73,13 +84,20 @@ def main() -> int:
             for package in ("fastapi", "pydantic", "scikit-learn", "uvicorn")
         },
         "python_version": sys.version.split()[0],
-        "keyword_baseline": "training-corpus token-frequency votes; fixed quality/planning/documents tie and no-hit order",
+        "keyword_baseline": (
+            "Training-data word counts, with a fixed order for ties and no matches."
+        ),
         "training_examples": len(train_texts),
         "test_examples": len(records),
         "keyword_correct": f"{sum(r['keyword_correct'] for r in results)}/{len(records)}",
         "model_correct": f"{sum(r['model_correct'] for r in results)}/{len(records)}",
-        "mean_api_response_ms": round(sum(endpoint_times) / len(endpoint_times), 3) if endpoint_times else None,
-        "timing_scope": "HTTP round trip plus request parsing and prediction; model fitting/loading is completed before the server starts and excluded",
+        "mean_api_response_ms": round(sum(endpoint_times) / len(endpoint_times), 3)
+        if endpoint_times
+        else None,
+        "timing_scope": (
+            "HTTP round trip, request parsing, and prediction. Model fitting and loading happen "
+            "before the server starts and are not included."
+        ),
         "prediction_failures": failures,
         "invalid_input_cases": invalid_results,
         "invalid_input_failures": invalid_failures,
@@ -98,5 +116,9 @@ if __name__ == "__main__":
     try:
         raise SystemExit(main())
     except (URLError, TimeoutError) as exc:
-        print(f"Cannot reach API at {BASE_URL}: {exc}. Start it with `poetry run python scripts/run_api.py`.", file=sys.stderr)
-        raise SystemExit(2)
+        print(
+            f"Cannot reach API at {BASE_URL}: {exc}. "
+            "Start it with `poetry run python scripts/run_api.py`.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2) from exc
