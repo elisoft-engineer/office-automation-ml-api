@@ -24,7 +24,7 @@ officecli --version
 
 OfficeCLI reads and edits the provided Word template. The report code itself uses Python's standard library for CSV parsing and validation.
 
-## Part A — status report
+## Part A: status report
 
 Run from the repository root:
 
@@ -42,7 +42,7 @@ poetry run python scripts/generate_report.py --csv examples/csv/zero_hours.csv -
 
 The validator requires `job_id`, `description`, `status`, and `estimated_hours`. Status is one of `open`, `in_progress`, or `done`. Hours must be finite and nonnegative; zero is valid. A header-only CSV produces zero counts and zero hours. Job details appear as pipe-separated lines in the template's details section.
 
-## Part B — classifier API
+## Part B: classifier API
 
 Start the service in one terminal:
 

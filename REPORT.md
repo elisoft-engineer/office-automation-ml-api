@@ -1,4 +1,4 @@
-# Office Automation and ML API — implementation note
+# Office Automation and ML API
 
 ## Approach
 
@@ -19,4 +19,4 @@ Only twelve short synthetic training examples and six test examples are provided
 ## Time and tools used
 
 - Time spent: about 8 hours.
-- AI support: I used an AI assistant to discuss the requirements and design choices, help draft and review code and tests, and debug issues. I reviewed the changes, ran the reported checks, and take responsibility for the final design and submission.
+- Help used: I used an AI assistant for a few design discussions and to review parts of the tests.
