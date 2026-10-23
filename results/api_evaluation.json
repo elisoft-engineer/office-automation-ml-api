@@ -8,13 +8,13 @@
     "uvicorn": "0.54.0"
   },
   "python_version": "3.14.4",
-  "keyword_baseline": "training-corpus token-frequency votes; fixed quality/planning/documents tie and no-hit order",
+  "keyword_baseline": "Training-data word counts, with a fixed order for ties and no matches.",
   "training_examples": 12,
   "test_examples": 6,
   "keyword_correct": "6/6",
   "model_correct": "6/6",
-  "mean_api_response_ms": 13.206,
-  "timing_scope": "HTTP round trip plus request parsing and prediction; model fitting/loading is completed before the server starts and excluded",
+  "mean_api_response_ms": 11.592,
+  "timing_scope": "HTTP round trip, request parsing, and prediction. Model fitting and loading happen before the server starts and are not included.",
   "prediction_failures": 0,
   "invalid_input_cases": [
     {
@@ -84,7 +84,7 @@
       "model_prediction": "quality",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 37.357
+      "response_ms": 36.005
     },
     {
       "text": "The leak check failed",
@@ -94,7 +94,7 @@
       "model_prediction": "quality",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 8.249
+      "response_ms": 8.06
     },
     {
       "text": "Move assembly to the next shift",
@@ -104,7 +104,7 @@
       "model_prediction": "planning",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 8.447
+      "response_ms": 5.688
     },
     {
       "text": "Assign workers to tomorrow's job",
@@ -114,7 +114,7 @@
       "model_prediction": "planning",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 9.784
+      "response_ms": 5.868
     },
     {
       "text": "Retrieve the current drawing",
@@ -124,7 +124,7 @@
       "model_prediction": "documents",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 8.734
+      "response_ms": 6.271
     },
     {
       "text": "Where is the certificate file?",
@@ -134,7 +134,7 @@
       "model_prediction": "documents",
       "model_correct": true,
       "http_status": 200,
-      "response_ms": 6.666
+      "response_ms": 7.659
     }
   ]
 }
