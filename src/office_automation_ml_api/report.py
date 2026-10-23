@@ -1,5 +1,3 @@
-"""Generate the synthetic status report using OfficeCLI for DOCX operations."""
-
 from __future__ import annotations
 
 import argparse
@@ -22,6 +20,8 @@ PLACEHOLDERS = ("TOTAL_JOBS", "OPEN", "IN_PROGRESS", "DONE", "TOTAL_HOURS", "JOB
 
 @dataclass(frozen=True)
 class Job:
+    """One validated job record from the input CSV."""
+
     job_id: str
     description: str
     status: str
@@ -66,6 +66,7 @@ def read_jobs(path: Path) -> list[Job]:
 
 
 def decimal_text(value: Decimal) -> str:
+    """Format hours clearly without expanding very large decimal values."""
     if value.is_zero():
         return "0"
     if -6 <= value.adjusted() < 15:
@@ -76,16 +77,20 @@ def decimal_text(value: Decimal) -> str:
 
 
 def officecli(*args: str) -> subprocess.CompletedProcess[str]:
+    """Run OfficeCLI and turn missing tools or command failures into clear errors."""
     try:
         return subprocess.run(["officecli", *args], text=True, capture_output=True, check=True)
     except FileNotFoundError as exc:
-        raise RuntimeError("OfficeCLI is required. Install it and verify with `officecli --version`.") from exc
+        raise RuntimeError(
+            "OfficeCLI is required. Install it and verify with `officecli --version`."
+        ) from exc
     except subprocess.CalledProcessError as exc:
         detail = (exc.stderr or exc.stdout or "unknown OfficeCLI error").strip()
         raise RuntimeError(f"OfficeCLI command failed: {detail}") from exc
 
 
 def generate(template: Path, csv_path: Path, output: Path) -> None:
+    """Validate the CSV, fill the template, and publish the finished document."""
     jobs = read_jobs(csv_path)
     if not template.is_file():
         raise ValueError(f"template does not exist: {template}")
@@ -95,10 +100,13 @@ def generate(template: Path, csv_path: Path, output: Path) -> None:
     counts = {status: sum(job.status == status for job in jobs) for status in STATUSES}
     total_hours = sum((job.hours for job in jobs), start=Decimal("0"))
     # Pipe-separated records remain legible in the template's dedicated detail paragraph.
-    rows = "\n".join(
-        f"{job.job_id} | {job.description} | {job.status} | {decimal_text(job.hours)} hours"
-        for job in jobs
-    ) or "No jobs"
+    rows = (
+        "\n".join(
+            f"{job.job_id} | {job.description} | {job.status} | {decimal_text(job.hours)} hours"
+            for job in jobs
+        )
+        or "No jobs"
+    )
 
     # Work in a sibling temporary DOCX and atomically publish only after OfficeCLI succeeds.
     with tempfile.TemporaryDirectory(prefix="status-report-", dir=output.parent) as temp_dir:
@@ -128,7 +136,7 @@ def generate(template: Path, csv_path: Path, output: Path) -> None:
             raise RuntimeError("OfficeCLI returned an unreadable batch receipt") from exc
         if len(results) != len(PLACEHOLDERS) or any(not item.get("success") for item in results):
             raise RuntimeError("OfficeCLI did not apply every placeholder replacement")
-        for name, result in zip(PLACEHOLDERS, results):
+        for name, result in zip(PLACEHOLDERS, results, strict=True):
             match = re.search(r"\((\d+) matched\)", result.get("output", ""))
             if match is None or int(match.group(1)) == 0:
                 raise RuntimeError(f"OfficeCLI did not find placeholder {{{{{name}}}}}")
@@ -141,6 +149,7 @@ def generate(template: Path, csv_path: Path, output: Path) -> None:
 
 
 def main() -> int:
+    """Parse command-line options and report user-facing generation errors."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", type=Path, default=Path("materials/jobs.csv"))
     parser.add_argument("--template", type=Path, default=Path("materials/status_template.docx"))
