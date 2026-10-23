@@ -44,5 +44,5 @@ async def validation_error_handler(_request: Request, _exc: RequestValidationErr
 @app.post("/predict")
 async def predict(payload: PredictRequest) -> dict[str, str]:
     """Classify the submitted text and return the selected model's name."""
-    label = classifier.predict([payload.text])[0]
+    label = str(classifier.predict([payload.text])[0])
     return {"label": label, "model": MODEL_NAME}
