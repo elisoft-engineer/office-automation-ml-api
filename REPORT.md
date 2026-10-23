@@ -8,7 +8,7 @@ Part B trains a TF-IDF unigram/bigram pipeline with logistic regression from `ma
 
 ## Evaluation
 
-All 13 Part A checks passed, including valid and invalid CSV examples and repeatability across two reports. Both the keyword baseline and TF-IDF/logistic-regression model scored 6/6. All seven invalid API examples returned HTTP 400, with no prediction-request failures. The six local HTTP requests averaged 11.592 ms each. Timing includes request parsing and prediction, but not model fitting at startup.
+All 13 Part A checks passed, including valid and invalid CSV examples and repeatability across two reports. Both the keyword baseline and TF-IDF/logistic-regression model scored 6/6. All seven invalid API examples returned HTTP 400, with no prediction-request failures. The six local HTTP requests in the latest evaluation averaged 10.644 ms each. Timing includes request parsing and prediction, but not model fitting at startup.
 
 The run used Python 3.14.4, FastAPI 0.161.1, Pydantic 2.14.1, scikit-learn 1.9.1, Uvicorn 0.54.0, and OfficeCLI 1.0.158. Prediction-level details are in `results/api_evaluation.json`; report case details are in `results/report_checks.json`.
 

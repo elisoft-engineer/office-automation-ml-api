@@ -93,7 +93,7 @@ The keyword baseline counts each request's words in the training examples by lab
 
 The test set has only six examples, so its accuracy is a check against these examples rather than a reliable estimate of performance on real requests. The training set is also small and synthetic, and the model only learns unigram and bigram patterns.
 
-In the latest run, both the baseline and the trained model classified all six examples correctly. Since both scored 6/6, the result does not show that the trained model is better than the baseline. The API averaged 11.592 ms per request, excluding model fitting at startup. All seven invalid requests returned HTTP 400, and all 13 Part A checks passed. Full results are in `results/`.
+In the latest run, both the baseline and the trained model classified all six examples correctly. Since both scored 6/6, the result does not show that the trained model is better than the baseline. The API averaged 10.644 ms per request, excluding model fitting at startup. All seven invalid requests returned HTTP 400, and all 13 Part A checks passed. Full results are in `results/`.
 
 ## Project layout
 
