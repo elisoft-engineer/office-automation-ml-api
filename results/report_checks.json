@@ -1,0 +1,82 @@
+{
+  "checks_passed": 13,
+  "checks_total": 13,
+  "results": [
+    {
+      "input": "materials/jobs.csv",
+      "passed": true,
+      "output_created": true,
+      "detail": "report content matches the input"
+    },
+    {
+      "input": "examples/csv/header_only.csv",
+      "passed": true,
+      "output_created": true,
+      "detail": "report content matches the input"
+    },
+    {
+      "input": "examples/csv/zero_hours.csv",
+      "passed": true,
+      "output_created": true,
+      "detail": "report content matches the input"
+    },
+    {
+      "input": "examples/csv/unknown_status.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: status must be one of open, in_progress, done"
+    },
+    {
+      "input": "examples/csv/negative_hours.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: estimated_hours must be zero or greater"
+    },
+    {
+      "input": "examples/csv/nonnumeric_hours.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: estimated_hours must be a number"
+    },
+    {
+      "input": "examples/csv/nan_hours.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: estimated_hours must be finite"
+    },
+    {
+      "input": "examples/csv/missing_job_id.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: job_id must not be blank"
+    },
+    {
+      "input": "examples/csv/missing_hours.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: estimated_hours must not be blank"
+    },
+    {
+      "input": "examples/csv/missing_description.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: description must not be blank"
+    },
+    {
+      "input": "examples/csv/missing_status.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "row 2: status must not be blank"
+    },
+    {
+      "input": "examples/csv/missing_column.csv",
+      "passed": true,
+      "output_created": false,
+      "error": "CSV is missing required column(s): estimated_hours"
+    },
+    {
+      "check": "repeatability",
+      "passed": true
+    }
+  ]
+}
