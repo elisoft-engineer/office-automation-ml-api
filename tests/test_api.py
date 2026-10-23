@@ -40,10 +40,24 @@ def test_predict_rejects_blank_text() -> None:
     assert "error" in response.json()
 
 
+def test_predict_rejects_missing_text() -> None:
+    response = post("/predict", json={})
+
+    assert response.status_code == 400
+    assert "error" in response.json()
+
+
 def test_predict_rejects_non_string_text() -> None:
     response = post("/predict", json={"text": 42})
 
     assert response.status_code == 400
+
+
+def test_predict_rejects_non_object_body() -> None:
+    response = post("/predict", json=[])
+
+    assert response.status_code == 400
+    assert "error" in response.json()
 
 
 def test_predict_rejects_unknown_fields() -> None:
