@@ -94,6 +94,14 @@ def generate(template: Path, csv_path: Path, output: Path) -> None:
     jobs = read_jobs(csv_path)
     if not template.is_file():
         raise ValueError(f"template does not exist: {template}")
+    template_text = officecli("view", str(template), "text").stdout
+    missing_placeholders = [
+        name for name in PLACEHOLDERS if "{{" + name + "}}" not in template_text
+    ]
+    if missing_placeholders:
+        raise RuntimeError(
+            "template is missing required placeholder(s): " + ", ".join(missing_placeholders)
+        )
     if output.resolve() == template.resolve():
         raise ValueError("output path must not overwrite the supplied template")
     output.parent.mkdir(parents=True, exist_ok=True)
