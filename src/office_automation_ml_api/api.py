@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from . import __version__
 from .classifiers import load_training, train_model
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -13,7 +14,7 @@ TRAIN_PATH = Path(os.environ.get("TRAIN_DATA", PROJECT_ROOT / "materials/api_tra
 texts, labels = load_training(TRAIN_PATH)
 MODEL_NAME = "tfidf-logistic-regression"
 classifier = train_model(texts, labels)
-app = FastAPI(title="Office Automation ML API", version="1.0.0")
+app = FastAPI(title="Office Automation ML API", version=__version__)
 
 
 class PredictRequest(BaseModel):
