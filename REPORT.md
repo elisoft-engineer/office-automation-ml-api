@@ -8,15 +8,15 @@ Part B trains a TF-IDF unigram/bigram pipeline with logistic regression from `ma
 
 ## Evaluation
 
-All 13 Part A checks passed, including all valid and invalid CSV examples and repeatability across two generated reports. The API evaluation scored 6/6 for both the keyword baseline and TF-IDF/logistic-regression model. All seven invalid API examples returned HTTP 400; there were no prediction-request failures. Mean response time was 13.206 ms for six local HTTP requests. It includes request parsing and prediction, and excludes model fitting at server startup.
+All 13 Part A checks passed, including valid and invalid CSV examples and repeatability across two reports. Both the keyword baseline and TF-IDF/logistic-regression model scored 6/6. All seven invalid API examples returned HTTP 400, with no prediction-request failures. The six local HTTP requests averaged 11.592 ms each. Timing includes request parsing and prediction, but not model fitting at startup.
 
 The run used Python 3.14.4, FastAPI 0.161.1, Pydantic 2.14.1, scikit-learn 1.9.1, Uvicorn 0.54.0, and OfficeCLI 1.0.158. Prediction-level details are in `results/api_evaluation.json`; report case details are in `results/report_checks.json`.
 
 ## Limitations
 
-Only twelve short synthetic training examples and six test examples are provided. The evaluation cannot establish generalization to real requests, class balance or vocabulary drift. The mean timing measures a local HTTP round trip and does not include startup-time training.
+Only twelve short synthetic training examples and six test examples are provided. That is too little data to say how the model would handle real requests, especially if they use different wording. The response time measures a local HTTP request after startup; it does not include model training or loading.
 
-## Time and assistance
+## Time and tools used
 
-- Assistant implementation and verification time in this session: approximately 50 minutes. Add any independent review or follow-up work to the total you report.
-- AI assistance: used for requirements analysis, implementation planning, and review. All code and outcomes are checked in this repository and reproducible with its commands.
+- Time spent: about 8 hours.
+- AI support: I used an AI assistant to discuss the requirements and design choices, help draft and review code and tests, and debug issues. I reviewed the changes, ran the reported checks, and take responsibility for the final design and submission.
