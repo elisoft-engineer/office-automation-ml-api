@@ -1,0 +1,140 @@
+{
+  "model": "tfidf-logistic-regression",
+  "scikit_learn_version": "1.9.1",
+  "dependency_versions": {
+    "fastapi": "0.161.1",
+    "pydantic": "2.14.1",
+    "scikit-learn": "1.9.1",
+    "uvicorn": "0.54.0"
+  },
+  "python_version": "3.14.4",
+  "keyword_baseline": "training-corpus token-frequency votes; fixed quality/planning/documents tie and no-hit order",
+  "training_examples": 12,
+  "test_examples": 6,
+  "keyword_correct": "6/6",
+  "model_correct": "6/6",
+  "mean_api_response_ms": 13.206,
+  "timing_scope": "HTTP round trip plus request parsing and prediction; model fitting/loading is completed before the server starts and excluded",
+  "prediction_failures": 0,
+  "invalid_input_cases": [
+    {
+      "case": "missing text",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "empty text",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "whitespace only",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "null text",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "numeric text",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "array text",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    },
+    {
+      "case": "non-object body",
+      "expected_status": 400,
+      "actual_status": 400,
+      "response": {
+        "error": "request must be an object with nonempty string text"
+      }
+    }
+  ],
+  "invalid_input_failures": 0,
+  "predictions": [
+    {
+      "text": "Inspect a crack in this weld",
+      "expected": "quality",
+      "keyword_prediction": "quality",
+      "keyword_correct": true,
+      "model_prediction": "quality",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 37.357
+    },
+    {
+      "text": "The leak check failed",
+      "expected": "quality",
+      "keyword_prediction": "quality",
+      "keyword_correct": true,
+      "model_prediction": "quality",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 8.249
+    },
+    {
+      "text": "Move assembly to the next shift",
+      "expected": "planning",
+      "keyword_prediction": "planning",
+      "keyword_correct": true,
+      "model_prediction": "planning",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 8.447
+    },
+    {
+      "text": "Assign workers to tomorrow's job",
+      "expected": "planning",
+      "keyword_prediction": "planning",
+      "keyword_correct": true,
+      "model_prediction": "planning",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 9.784
+    },
+    {
+      "text": "Retrieve the current drawing",
+      "expected": "documents",
+      "keyword_prediction": "documents",
+      "keyword_correct": true,
+      "model_prediction": "documents",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 8.734
+    },
+    {
+      "text": "Where is the certificate file?",
+      "expected": "documents",
+      "keyword_prediction": "documents",
+      "keyword_correct": true,
+      "model_prediction": "documents",
+      "model_correct": true,
+      "http_status": 200,
+      "response_ms": 6.666
+    }
+  ]
+}
