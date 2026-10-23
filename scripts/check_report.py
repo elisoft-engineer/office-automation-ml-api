@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""Run the supplied Part A cases, checking atomic failures and repeatability."""
-
 import json
 import subprocess
 import sys
@@ -14,12 +11,15 @@ from office_automation_ml_api.report import STATUSES, decimal_text, generate, re
 
 
 def cli_text(path: Path) -> str:
-    proc = subprocess.run(["officecli", "view", str(path), "text"], text=True,
-                          capture_output=True, check=True)
+    """Read the text OfficeCLI can see in a completed Word document."""
+    proc = subprocess.run(
+        ["officecli", "view", str(path), "text"], text=True, capture_output=True, check=True
+    )
     return proc.stdout
 
 
 def verify_report(path: Path, source: Path) -> tuple[bool, str]:
+    """Check that the report reflects its input rows and summary values."""
     visible = cli_text(path)
     normalized = " ".join(visible.split())
     jobs = read_jobs(source)
@@ -47,8 +47,13 @@ def verify_report(path: Path, source: Path) -> tuple[bool, str]:
 
 
 def main() -> int:
+    """Run each report example and save the results of the checks."""
     checks = json.loads((ROOT / "examples/checks.json").read_text(encoding="utf-8"))
-    valid_names = {"materials/jobs.csv", "examples/csv/header_only.csv", "examples/csv/zero_hours.csv"}
+    valid_names = {
+        "materials/jobs.csv",
+        "examples/csv/header_only.csv",
+        "examples/csv/zero_hours.csv",
+    }
     results = []
     with tempfile.TemporaryDirectory(prefix="task2-check-") as temporary:
         temp = Path(temporary)
@@ -58,8 +63,14 @@ def main() -> int:
             if case["input"] in valid_names:
                 generate(ROOT / "materials/status_template.docx", source, output)
                 passed, detail = verify_report(output, source)
-                results.append({"input": case["input"], "passed": output.is_file() and passed,
-                                "output_created": output.is_file(), "detail": detail})
+                results.append(
+                    {
+                        "input": case["input"],
+                        "passed": output.is_file() and passed,
+                        "output_created": output.is_file(),
+                        "detail": detail,
+                    }
+                )
             else:
                 try:
                     generate(ROOT / "materials/status_template.docx", source, output)
@@ -67,8 +78,14 @@ def main() -> int:
                 except ValueError as exc:
                     error = str(exc)
                 passed = error is not None and not output.exists()
-                results.append({"input": case["input"], "passed": passed,
-                                "output_created": output.exists(), "error": error})
+                results.append(
+                    {
+                        "input": case["input"],
+                        "passed": passed,
+                        "output_created": output.exists(),
+                        "error": error,
+                    }
+                )
         # Generate the default report twice and compare OfficeCLI-visible content.
         first, second = temp / "first.docx", temp / "second.docx"
         generate(ROOT / "materials/status_template.docx", ROOT / "materials/jobs.csv", first)
@@ -76,11 +93,16 @@ def main() -> int:
         deterministic = cli_text(first) == cli_text(second)
         results.append({"check": "repeatability", "passed": deterministic})
 
-    summary = {"checks_passed": sum(bool(row["passed"]) for row in results),
-               "checks_total": len(results), "results": results}
+    summary = {
+        "checks_passed": sum(bool(row["passed"]) for row in results),
+        "checks_total": len(results),
+        "results": results,
+    }
     results_dir = ROOT / "results"
     results_dir.mkdir(exist_ok=True)
-    (results_dir / "report_checks.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    (results_dir / "report_checks.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps(summary, indent=2))
     return 0 if summary["checks_passed"] == summary["checks_total"] else 1
 
