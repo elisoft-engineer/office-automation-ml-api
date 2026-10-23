@@ -18,3 +18,31 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{ include = "office_automation_ml_api", from = "src" }]
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.17.2,<0.18.0)",
+    "pytest (>=9.1.1,<10.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "mypy (>=2.4.0,<3.0.0)"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.14"
+files = ["src", "scripts"]
+check_untyped_defs = true
+ignore_missing_imports = true
